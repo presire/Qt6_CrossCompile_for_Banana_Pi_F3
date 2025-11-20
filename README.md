@@ -70,7 +70,21 @@ The GCC RISC-V 64 cross toolchain is built using system-specific LTO (Link Time 
 
 <br><br>
 
-# 2. Banana Pi Configuration
+# 2. GCC Toolchain Build Instructions
+
+For detailed instructions on building the RISC-V64 GCC cross-compilation toolchain (including Binutils, GCC, and GDB), please refer to the following document:
+
+**[GCC Toolchain Build Instructions for RISC-V64](GCC_Toolchain_Build.md)**
+
+This guide includes:
+- Building Binutils for RISC-V64
+- Building GCC cross-compiler with system root support
+- Installing GDB with Python support for debugging
+- Troubleshooting common build issues
+
+<br><br>
+
+# 3. Banana Pi Configuration
 Uncomment the lines starting with deb-src in the /etc/apt/sources.list file.<br>
 
 ```bash
@@ -170,7 +184,7 @@ If you want to use multimedia, Bluetooth, etc., install any of the optional pack
 
 <br><br>
 
-# 3. Qt Source Code Download (Host PC)
+# 4. Qt Source Code Download (Host PC)
 Download the Qt source code on the host PC.<br>
 
 ```bash
@@ -215,7 +229,7 @@ Follow the Qt installation screen to install Qt 6.<br>
 <u>*Be sure to match the version of Qt 6 you are cross-compiling.*</u><br>
 <br><br>
 
-# 4. Create Banana Pi System Root Directory (Host PC)
+# 5. Create Banana Pi System Root Directory (Host PC)
 On the host PC, create a system root directory.<br>
 
 ```bash
@@ -258,7 +272,7 @@ sudo ./sysroot-relativelinks.py /BananaPi
 ```
 <br><br>
 
-# 5. Create qmake.conf and qplatformdefs.h Files for Cross-Compilation (Host PC)
+# 6. Create qmake.conf and qplatformdefs.h Files for Cross-Compilation (Host PC)
 On the host PC, go to the Qt source code directory and create a new device directory.<br>
 
 ```bash
@@ -285,7 +299,7 @@ sudo cp /path/to/qplatformdefs.h ./
 
 <br><br>
 
-# 6. Build Qt Libraries (Host PC)
+# 7. Build Qt Libraries (Host PC)
 On the host PC, create a directory for installing Qt libraries for Banana Pi.<br>
 
 ```bash
@@ -368,7 +382,7 @@ ln -s host-qmake qmake-host
 ```
 <br><br>
 
-# 7. Upload Qt Library to Banana Pi (Host PC)
+# 8. Upload Qt Library to Banana Pi (Host PC)
 Create a directory on Banana Pi for installing Qt libraries.<br>
 
 ```bash
@@ -386,8 +400,8 @@ rsync -avz --rsh="ssh" --delete ~/InstallSoftware/BananaPi_Qt6/* \
 ```
 <br><br>
 
-# 8. JetBrains CLion Configuration
-## 8.1 Creating Toolchain
+# 9. JetBrains CLion Configuration
+## 9.1 Creating Toolchain
 Launch CLion and select [File] menu - [Settings].<br>
 Select [Build, Execution, Deployment] - [Toolchains] in the left pane of the [Settings] screen.<br>
 Click the [+] icon in the right pane of the [Settings] screen and select [System].<br>
@@ -424,7 +438,7 @@ Click the [+] icon in the right pane of the [Settings] screen and select [System
 Press the [Apply] button at the bottom right of the [Settings] screen.<br>
 <br>
 
-## 8.2 CMake Configuration
+## 9.2 CMake Configuration
 Select [Build, Execution, Deployment] - [CMake] in the left pane of the [Settings] screen.<br>
 Click the [+] icon in the right pane of the [Settings] screen.<br>
 <br>
@@ -482,7 +496,7 @@ Click the [+] icon in the right pane of the [Settings] screen.<br>
 Press the [Apply] button at the bottom right of the [Settings] screen.<br>
 <br>
 
-## 8.3 SSH Configuration
+## 9.3 SSH Configuration
 Select [File] menu - [Settings].<br>
 Select [Tools] - [SSH Configurations] in the left pane of the [Settings] screen.<br>
 Click the [+] icon in the right pane of the [Settings] screen.<br>
@@ -516,7 +530,7 @@ Press the [Test Connection] button to connect to Banana Pi via SSH.<br>
 Press the [Apply] button at the bottom right of the [Settings] screen.<br>
 <br>
 
-## 8.4 Project Configuration
+## 9.4 Project Configuration
 Launch CLion and select [File] menu - [New] - [Project...].<br>
 From the [New Project] screen, select [Qt Console Application] or [Qt Widgets Application].<br>
 <br>
@@ -637,7 +651,7 @@ vi .idea/runConfigurations/<Project Name>.xml
 ```
 <br>
 
-## 8.5 GDB Configuration
+## 9.5 GDB Configuration
 If your project requires more debugging configuration, create a debugger initialization file (.gdbinit for GDB or .lldbinit for LLDB) directly in the project directory.<br>
 This file can also be shared with other projects via VCS.<br>
 <br>
@@ -685,7 +699,7 @@ Launch CLion and open any project.<br>
 Check if the .gdbinit or .lldbinit file has been added to the project on the left side of the CLion main screen.<br>
 <br><br>
 
-# 9. Alternative: Using CMake Toolchain File
+# 10. Alternative: Using CMake Toolchain File
 In addition to the qmake-based approach described above, you can also use a CMake toolchain file for cross-compilation.<br>
 <br>
 
@@ -721,8 +735,8 @@ cmake --install .
 
 <br><br>
 
-# 10. Notes and Troubleshooting
-## 10.1 Vector Extension Support
+# 11. Notes and Troubleshooting
+## 11.1 Vector Extension Support
 The attached configuration files include RISC-V vector extension 1.0 support, which can significantly improve performance for:
 * Image processing
 * Audio processing
@@ -731,7 +745,7 @@ The attached configuration files include RISC-V vector extension 1.0 support, wh
 
 If your GCC toolchain or hardware doesn't support vector extensions, modify the `-march` flag from `rv64gcv` to `rv64gc`.
 
-## 10.2 Verifying Vector Extension
+## 11.2 Verifying Vector Extension
 To check if vector instructions are being generated:
 
 ```bash
@@ -740,7 +754,7 @@ riscv64-linux-gnu-objdump -d your_binary | grep -E "vl|vs|vadd|vmul"
 
 These instructions indicate vector operations (vl=vector load, vs=vector store, vadd/vmul=vector arithmetic).
 
-## 10.3 Common Issues
+## 11.3 Common Issues
 **Issue: "Could not load the Qt platform plugin"**
 * Solution: Ensure the QT_QPA_PLATFORM_PLUGIN_PATH environment variable is set correctly
 * Add `-platform wayland` or `-platform eglfs` to the GDB Server Args
@@ -750,12 +764,12 @@ These instructions indicate vector operations (vl=vector load, vs=vector store, 
 * Check with: `strings /usr/lib/riscv64-linux-gnu/libstdc++.so.6 | grep GLIBCXX`
 
 **Issue: Slow debug startup**
-* Solution: Use the sysroot symbolic link method described in section 8.5
+* Solution: Use the sysroot symbolic link method described in section 9.5
 * Set `set sysroot /path/to/sysroot` instead of `set sysroot target:/`
 
 <br><br>
 
-# 11. Attached Files
+# 12. Attached Files
 This document references the following attached files:
 
 1. **qmake.conf** - RISC-V64 qmake configuration with vector extension support
